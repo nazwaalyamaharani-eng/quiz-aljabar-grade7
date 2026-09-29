@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Algebra Arena — Kuis Aljabar Kelas 7</title>
+<style>
+:root{
+--bg:#070d19;--panel:#111a2b;--panel2:#17243a;--line:#2b3d58;--text:#eef5ff;--muted:#9fb3cb;
+--blue:#54a7ff;--purple:#a27cff;--green:#56d68a;--red:#ff6878;--yellow:#ffd166;--cyan:#52e0d0;--orange:#ff9e64;
+--shadow:0 16px 42px rgba(0,0,0,.30)
+}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:
+radial-gradient(circle at 8% 12%,rgba(84,167,255,.16),transparent 30%),
+radial-gradient(circle at 92% 10%,rgba(162,124,255,.15),transparent 28%),
+linear-gradient(180deg,#07101f,#060b14);color:var(--text);min-height:100vh}
+button,input,select{font:inherit} .app{max-width:1180px;margin:auto;padding:24px} .card{background:linear-gradient(180deg,rgba(23,36,58,.96),rgba(12,21,36,.98));border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}
+.hidden{display:none!important} .pill{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:#102139;border:1px solid #274363;color:#b8d8ff;font-size:13px;font-weight:800}
+.hero{min-height:calc(100vh - 48px);display:grid;grid-template-columns:1.25fr .75fr;gap:28px;align-items:center;padding:42px}
+.hero h1{font-size:clamp(42px,6vw,78px);line-height:.94;margin:18px 0;background:linear-gradient(90deg,#fff,#84c2ff,#beaaff);-webkit-background-clip:text;color:transparent}
+.hero p{font-size:18px;line-height:1.65;color:var(--muted);max-width:760px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0} .stat{background:#0c1728;border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center} .stat b{font-size:26px;display:block} .stat span{font-size:12px;color:var(--muted)}
+.startbox{padding:24px} .startbox h3{margin-top:0} .field{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #385170;background:#0b1728;color:#fff;outline:none}
+.btn{border:0;border-radius:14px;padding:13px 18px;font-weight:850;cursor:pointer;transition:.18s} .btn:hover{transform:translateY(-1px)} .btn.primary{background:linear-gradient(135deg,var(--blue),var(--purple));color:#06101c} .btn.secondary{background:#17263b;color:#d7e8ff;border:1px solid #34506f} .btn.warn{background:#342a16;color:#ffd778;border:1px solid #6f5620} .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.quiz-top{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin-bottom:16px} .progressWrap{background:#0a1424;border:1px solid var(--line);border-radius:16px;padding:14px}
+.progressMeta{display:flex;justify-content:space-between;color:#bcd0e8;font-size:13px;margin-bottom:8px} .bar{height:10px;border-radius:999px;background:#172338;overflow:hidden} .bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple));transition:.35s}
+.timer{width:86px;height:86px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--green) 100%,#223149 0);position:relative} .timer:after{content:"";position:absolute;inset:7px;border-radius:50%;background:#0c1727} .timer span{position:relative;z-index:2;font-size:25px;font-weight:900}
+.quiz-grid{display:grid;grid-template-columns:220px 1fr;gap:16px} .map{padding:16px;position:sticky;top:16px;height:fit-content} .map h4{margin:0 0 12px} .qmap{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.qdot{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;background:#101d31;border:1px solid #2d4462;color:#9cb3cc;font-size:12px;font-weight:800;cursor:pointer} .qdot.current{outline:2px solid var(--blue);color:#fff} .qdot.correct{background:#123829;border-color:#2b8d61;color:#8ff0ba} .qdot.wrong{background:#3e1820;border-color:#9b3f50;color:#ffb1bd} .qdot.unanswered{background:#3b3118;border-color:#88702f;color:#ffe39a}
+.question{padding:26px} .qhead{display:flex;justify-content:space-between;gap:14px;align-items:flex-start} .topic{color:#92b9e8;font-size:13px;font-weight:850} .level{font-size:12px;padding:6px 10px;border-radius:999px;background:#101d31;border:1px solid #2d4462}
+.qtext{font-size:clamp(22px,3vw,34px);line-height:1.25;margin:12px 0 18px;font-weight:900} .visual{background:#0b1627;border:1px dashed #36506f;border-radius:18px;padding:18px;margin-bottom:18px;min-height:70px}
+.chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center} .chip{padding:13px 18px;border-radius:14px;background:#102847;border:1px solid #3e6fa5;font-size:22px;font-weight:900} .chip.const{background:#2a1f41;border-color:#7554a6}
+.v-arrow{font-size:25px;text-align:center;font-weight:900;color:#a7d3ff} .rectviz{width:78%;margin:5px auto;height:120px;border:3px solid #5aa9ff;border-radius:12px;position:relative;background:linear-gradient(135deg,rgba(90,169,255,.12),rgba(162,124,255,.12))} .rectviz .top{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-weight:900} .rectviz .side{position:absolute;left:-66px;top:46px;font-weight:900}
+.areagrid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;width:220px;height:150px;margin:auto;border:2px solid #5aa9ff} .areagrid div{border:1px solid #294767;display:grid;place-items:center;color:#bfe0ff;font-weight:800} .frameviz{width:210px;height:160px;margin:auto;background:#6550aa;border-radius:14px;padding:24px} .frameviz .inner{width:100%;height:100%;background:#0d1b2d;border:2px solid #a893ff;display:grid;place-items:center;font-weight:900}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px} .opt{padding:15px;border-radius:16px;background:#101c2f;border:1px solid #2e4564;color:#eaf3ff;cursor:pointer;text-align:left;display:flex;gap:10px;align-items:flex-start;min-height:58px} .opt:hover{border-color:#5a86b8} .opt.selected{border-color:var(--blue);background:#132a46} .opt.correct{border-color:#38b478;background:#123627} .opt.wrong{border-color:#d95568;background:#3a1720} .badge{min-width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#1a2c46;font-weight:900}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px} .feedback{margin-top:18px;padding:18px;border-radius:18px;background:#0b1728;border:1px solid #2d4462} .feedback.good{border-color:#2f805c} .feedback.bad{border-color:#8c3b4a} .feedback h4{margin:0 0 8px} .feedback p{margin:0;color:#c7d6e8;line-height:1.55} .explain{margin-top:10px;padding-top:10px;border-top:1px solid #263a55;color:#d5e7fb}
+.result{padding:32px} .result h2{font-size:36px;margin:0 0 8px} .scoreRing{width:160px;height:160px;border-radius:50%;display:grid;place-items:center;margin:auto;position:relative} .scoreRing:after{content:"";position:absolute;inset:13px;background:#0c1727;border-radius:50%} .scoreRing div{position:relative;z-index:2;text-align:center} .scoreRing b{font-size:38px}
+.scoreGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0} .scoreCard{padding:18px;border-radius:18px;background:#0d1a2e;border:1px solid var(--line);text-align:center} .scoreCard b{display:block;font-size:26px} .scoreCard span{font-size:12px;color:var(--muted)} .topicRows{display:grid;gap:10px} .topicRow{display:grid;grid-template-columns:190px 1fr 60px;gap:10px;align-items:center} .miniBar{height:10px;background:#18273d;border-radius:999px;overflow:hidden} .miniBar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:999px}
+.review{margin-top:24px} .reviewItem{padding:16px;margin:10px 0;background:#0d1a2e;border:1px solid var(--line);border-radius:16px} .reviewItem b{color:#fff} .reviewItem small{display:block;color:var(--muted);margin-top:6px;line-height:1.5}
+.toast{position:fixed;right:18px;bottom:18px;padding:12px 16px;background:#12243b;border:1px solid #3a5b7f;border-radius:14px;color:#eaf4ff;box-shadow:var(--shadow);z-index:10;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s} .toast.show{opacity:1;transform:none}
+@media(max-width:860px){.hero{grid-template-columns:1fr;padding:24px}.stats{grid-template-columns:1fr 1fr}.quiz-grid{grid-template-columns:1fr}.map{position:static}.qmap{grid-template-columns:repeat(10,1fr)}.options{grid-template-columns:1fr}.scoreGrid{grid-template-columns:1fr 1fr}.topicRow{grid-template-columns:120px 1fr 48px}}
+</style>
+</head>
+<body>
+<div class="app">
+<section id="start" class="card hero">
+  <div>
+    <span class="pill">⚡ Quiz 2 · Review Aljabar · Kelas 7</span>
+    <h1>ALGEBRA<br>ARENA</h1>
+    <p>Kuis interaktif <b>50 soal</b> untuk review <b>bentuk aljabar dan operasi hitung aljabar</b>: unsur bentuk aljabar, suku sejenis, penjumlahan-pengurangan, distributif, perkalian-pembagian, substitusi, model aljabar, serta challenge TKA/OSN style.</p>
+    <div class="stats">
+      <div class="stat"><b>50</b><span>soal</span></div>
+      <div class="stat"><b>10–30 dtk</b><span>waktu dasar / soal</span></div>
+      <div class="stat"><b>10</b><span>topik latihan</span></div>
+    </div>
+    <p style="font-size:14px">Satu soal per layar • feedback langsung • pembahasan • skor & analisis per topik • tambahan waktu opsional.</p>
+  </div>
+  <div class="card startbox">
+    <h3>Siap masuk arena?</h3>
+    <p style="color:var(--muted);font-size:14px">Masukkan nama siswa. Skor terbaik disimpan pada browser yang digunakan.</p>
+    <input id="studentName" class="field" placeholder="Nama siswa..." autocomplete="off">
+    <div style="height:12px"></div>
+    <label for="extraTime" style="display:block;color:var(--muted);font-size:13px;margin-bottom:6px">Tambahan waktu otomatis untuk setiap soal</label>
+    <select id="extraTime" class="field">
+      <option value="0">Normal — tanpa tambahan</option>
+      <option value="5">+5 detik / soal</option>
+      <option value="10">+10 detik / soal</option>
+      <option value="15">+15 detik / soal</option>
+      <option value="20">+20 detik / soal</option>
+    </select>
+    <div style="height:8px"></div>
+    <p style="color:var(--muted);font-size:12px;margin:0">Saat mengerjakan, tombol <b>+10 detik</b> dapat dipakai satu kali pada setiap soal.</p>
+    <div style="height:14px"></div>
+    <button class="btn primary" style="width:100%" onclick="startQuiz()">Mulai Kuis</button>
+  </div>
+</section>
+
+<section id="quiz" class="hidden">
+  <div class="quiz-top">
+    <div class="progressWrap">
+      <div class="progressMeta"><span id="progressText">Soal 1 / 50</span><span id="studentLabel">Siswa</span></div>
+      <div class="bar"><div id="progressBar"></div></div>
+    </div>
+    <div id="timer" class="timer"><span id="timerText">20</span></div>
+  </div>
+  <div class="quiz-grid">
+    <aside class="card map">
+      <h4>Peta Soal</h4>
+      <div id="qmap" class="qmap"></div>
+      <div style="margin-top:14px;color:var(--muted);font-size:11px;line-height:1.6">Hijau = benar<br>Merah = salah<br>Kuning = waktu habis</div>
+    </aside>
+    <main class="card question">
+      <div class="qhead">
+        <div><div id="topic" class="topic"></div><div id="qnum" style="color:var(--muted);font-size:12px;margin-top:4px"></div></div>
+        <span id="level" class="level"></span>
+      </div>
+      <div id="qtext" class="qtext"></div>
+      <div id="visual" class="visual hidden"></div>
+      <div id="options" class="options"></div>
+      <div class="actions">
+        <button id="checkBtn" class="btn primary" onclick="checkAnswer()">Cek Jawaban</button>
+        <button id="addTimeBtn" class="btn warn" onclick="addTime()">⏱ +10 detik</button>
+        <button id="nextBtn" class="btn secondary hidden" onclick="nextQuestion()">Soal Berikutnya →</button>
+      </div>
+      <div id="feedback" class="feedback hidden"></div>
+    </main>
+  </div>
+</section>
+
+<section id="result" class="card result hidden"></section>
+<div id="toast" class="toast"></div>
+</div>
+
+<script>
+const questions = [{"topic": "Konsep Aljabar", "level": "Easy", "time": 10, "q": "Pada bentuk aljabar 7x − 5, koefisien dari x adalah ...", "opts": ["−5", "5", "7", "x"], "ans": [2], "exp": "Koefisien adalah bilangan yang mengalikan variabel. Pada 7x, koefisien x adalah 7.", "visual": {"type": "chips", "items": [["7x", "term"], ["−5", "const"]]}, "type": "single", "id": 1}, {"topic": "Konsep Aljabar", "level": "Easy", "time": 10, "q": "Berapa banyak suku pada bentuk 3a + 4b − 6?", "opts": ["1 suku", "2 suku", "3 suku", "4 suku"], "ans": [2], "exp": "Suku dipisahkan oleh tanda + atau −. Suku-sukunya adalah 3a, 4b, dan −6.", "visual": {"type": "chips", "items": [["3a", "term"], ["+ 4b", "term"], ["− 6", "const"]]}, "type": "single", "id": 2}, {"topic": "Konsep Aljabar", "level": "Easy", "time": 12, "q": "Variabel pada bentuk 8m + 2n − 9 adalah ...", "opts": ["8 dan 2", "m dan n", "m dan 9", "n dan −9"], "ans": [1], "exp": "Variabel adalah huruf yang nilainya dapat berubah, yaitu m dan n.", "type": "single", "visual": null, "id": 3}, {"topic": "Konsep Aljabar", "level": "Easy", "time": 10, "q": "Koefisien pada suku −5p adalah ...", "opts": ["−5", "5", "−p", "p"], "ans": [0], "exp": "Tanda negatif merupakan bagian dari koefisien. Jadi koefisien p adalah −5.", "type": "single", "visual": null, "id": 4}, {"topic": "Konsep Aljabar", "level": "Easy", "time": 10, "q": "Konstanta pada bentuk 2x − 3y + 11 adalah ...", "opts": ["2", "−3", "11", "x"], "ans": [2], "exp": "Konstanta adalah suku tanpa variabel. Pada bentuk tersebut konstantanya 11.", "type": "single", "visual": null, "id": 5}, {"topic": "Konsep Aljabar", "level": "Easy", "time": 12, "q": "Manakah yang merupakan suku sejenis dengan 4x?", "opts": ["−7x", "4y", "x²", "7"], "ans": [0], "exp": "Suku sejenis harus memiliki variabel dan pangkat yang sama. −7x sejenis dengan 4x.", "type": "single", "visual": null, "id": 6}, {"topic": "Model Aljabar", "level": "Easy", "time": 15, "q": "Harga satu potion adalah x Robux. Harga 5 potion ditambah biaya admin 12 Robux ditulis sebagai ...", "opts": ["5x + 12", "5(x + 12)", "12x + 5", "x + 17"], "ans": [0], "exp": "Lima potion berharga 5x dan biaya admin ditambah 12, sehingga totalnya 5x + 12.", "visual": {"type": "arrows", "text": "5 potion × x Robux  →  5x   lalu + 12"}, "type": "single", "id": 7}, {"topic": "Model Aljabar", "level": "Easy", "time": 15, "q": "Mario memiliki k koin. Fatih memiliki 3 koin lebih banyak daripada Mario. Jumlah koin mereka adalah ...", "opts": ["k + 3", "2k + 3", "3k + 2", "2k − 3"], "ans": [1], "exp": "Mario = k dan Fatih = k + 3. Jumlah = k + (k + 3) = 2k + 3.", "type": "single", "visual": null, "id": 8}, {"topic": "Model Aljabar", "level": "Easy", "time": 12, "q": "Jika panjang sisi sebuah persegi adalah s cm, kelilingnya adalah ...", "opts": ["s²", "2s", "4s", "4 + s"], "ans": [2], "exp": "Keliling persegi adalah empat kali panjang sisi, yaitu 4s.", "type": "single", "visual": null, "id": 9}, {"topic": "Konsep Aljabar", "level": "Easy", "time": 12, "q": "Pada bentuk 4x + 2y − 8, banyak sukunya adalah ...", "opts": ["2", "3", "4", "5"], "ans": [1], "exp": "Suku-sukunya adalah 4x, 2y, dan −8. Jadi ada 3 suku.", "type": "single", "visual": null, "id": 10}, {"topic": "Suku Sejenis", "level": "Easy", "time": 12, "q": "Sederhanakan 7x − 3x + 5.", "opts": ["4x + 5", "10x + 5", "4x", "10x − 5"], "ans": [0], "exp": "Gabungkan suku sejenis: 7x − 3x = 4x. Konstanta 5 tetap, sehingga 4x + 5.", "type": "single", "visual": null, "id": 11}, {"topic": "Suku Sejenis", "level": "Medium", "time": 15, "q": "Sederhanakan 5a + 2b − 3a + b.", "opts": ["2a + 3b", "8a + 3b", "2a + b", "2ab + 3b"], "ans": [0], "exp": "Suku a: 5a − 3a = 2a. Suku b: 2b + b = 3b. Hasilnya 2a + 3b.", "type": "single", "visual": null, "id": 12}, {"topic": "Suku Sejenis", "level": "Easy", "time": 12, "q": "Sederhanakan 4p + 6 − 2p + 3.", "opts": ["2p + 9", "6p + 9", "2p + 3", "2p − 9"], "ans": [0], "exp": "4p − 2p = 2p dan 6 + 3 = 9, sehingga hasilnya 2p + 9.", "type": "single", "visual": null, "id": 13}, {"topic": "Suku Sejenis", "level": "Medium", "time": 15, "q": "Sederhanakan 8m − 3 + 2m − 5.", "opts": ["10m − 8", "6m − 8", "10m + 2", "6m + 2"], "ans": [0], "exp": "8m + 2m = 10m dan −3 − 5 = −8. Jadi 10m − 8.", "type": "single", "visual": null, "id": 14}, {"topic": "Operasi Aljabar", "level": "Medium", "time": 16, "q": "Hasil dari (3x + 4) + (2x − 7) adalah ...", "opts": ["5x − 3", "5x + 11", "x − 3", "x + 11"], "ans": [0], "exp": "3x + 2x = 5x dan 4 − 7 = −3. Jadi hasilnya 5x − 3.", "type": "single", "visual": null, "id": 15}, {"topic": "Operasi Aljabar", "level": "Medium", "time": 18, "q": "Hasil dari (7a − 2) − (3a + 5) adalah ...", "opts": ["4a + 3", "4a − 7", "10a − 7", "4a + 7"], "ans": [1], "exp": "Kurangi seluruh isi kurung kedua: 7a − 2 − 3a − 5 = 4a − 7.", "type": "single", "visual": null, "id": 16}, {"topic": "Suku Sejenis", "level": "Medium", "time": 16, "q": "Sederhanakan 6x + 2y − 4x + 5y.", "opts": ["2x + 7y", "10x + 7y", "2x + 3y", "7xy"], "ans": [0], "exp": "6x − 4x = 2x dan 2y + 5y = 7y. Hasilnya 2x + 7y.", "type": "single", "visual": null, "id": 17}, {"topic": "Suku Sejenis", "level": "Medium", "time": 20, "q": "Sederhanakan 3p − 2q + 4 − 5p + q − 6.", "opts": ["−2p − q − 2", "2p − q − 2", "−2p − 3q + 10", "8p − q − 2"], "ans": [0], "exp": "3p − 5p = −2p, −2q + q = −q, dan 4 − 6 = −2.", "type": "single", "visual": null, "id": 18}, {"topic": "Suku Sejenis", "level": "Medium", "time": 16, "q": "Sederhanakan 9a − 4b − 3a + 7b.", "opts": ["6a + 3b", "12a + 3b", "6a − 11b", "6ab + 3b"], "ans": [0], "exp": "9a − 3a = 6a dan −4b + 7b = 3b. Jadi 6a + 3b.", "type": "single", "visual": null, "id": 19}, {"topic": "TKA Style", "level": "Medium", "time": 22, "type": "multi", "q": "Pilih SEMUA bentuk yang ekuivalen dengan 5x + 7.", "opts": ["2x + 3x + 7", "7 + 5x", "6x + 7 − x", "5(x + 7)"], "ans": [0, 1, 2], "exp": "Tiga bentuk pertama semuanya menyederhana menjadi 5x + 7. Sedangkan 5(x + 7) = 5x + 35.", "visual": null, "id": 20}, {"topic": "Distributif", "level": "Easy", "time": 12, "q": "Hasil dari 4(x + 3) adalah ...", "opts": ["4x + 3", "4x + 12", "x + 12", "12x"], "ans": [1], "exp": "Sifat distributif: 4 dikalikan ke setiap suku di dalam kurung, sehingga 4x + 12.", "type": "single", "visual": null, "id": 21}, {"topic": "Distributif", "level": "Medium", "time": 15, "q": "Hasil dari 3(2a − b) adalah ...", "opts": ["6a − 3b", "6a − b", "5a − 3b", "6ab"], "ans": [0], "exp": "Kalikan 3 dengan kedua suku: 3·2a = 6a dan 3·(−b) = −3b.", "type": "single", "visual": null, "id": 22}, {"topic": "Distributif", "level": "Medium", "time": 18, "q": "Sederhanakan 5(y − 2) + 2y.", "opts": ["7y − 10", "7y − 2", "3y − 10", "5y"], "ans": [0], "exp": "5(y − 2) = 5y − 10. Tambahkan 2y sehingga menjadi 7y − 10.", "type": "single", "visual": null, "id": 23}, {"topic": "Distributif", "level": "Medium", "time": 20, "q": "Sederhanakan 4(x + 3) − 2(x − 5).", "opts": ["2x + 2", "2x + 22", "6x + 2", "6x + 22"], "ans": [1], "exp": "4x + 12 − 2x + 10 = 2x + 22. Tanda minus di depan 2(x−5) harus didistribusikan dengan benar.", "type": "single", "visual": null, "id": 24}, {"topic": "Distributif", "level": "Hard", "time": 25, "q": "Sederhanakan 3(2a − b) + 5(a + 4b).", "opts": ["11a + 17b", "11a − 17b", "a + 17b", "11a + b"], "ans": [0], "exp": "3(2a−b)=6a−3b dan 5(a+4b)=5a+20b. Jumlahnya 11a+17b.", "type": "single", "visual": null, "id": 25}, {"topic": "Distributif", "level": "Hard", "time": 25, "q": "Sederhanakan 6(2y − 1) − 2(3y + 4).", "opts": ["6y − 14", "18y − 10", "6y + 2", "18y − 14"], "ans": [0], "exp": "12y − 6 − 6y − 8 = 6y − 14.", "type": "single", "visual": null, "id": 26}, {"topic": "Distributif", "level": "Medium", "time": 20, "q": "Sederhanakan −2(3x − 4) + 5x.", "opts": ["−x + 8", "x + 8", "−11x + 8", "−x − 8"], "ans": [0], "exp": "−2(3x−4)=−6x+8. Tambah 5x menghasilkan −x+8.", "type": "single", "visual": null, "id": 27}, {"topic": "Distributif", "level": "Hard", "time": 25, "q": "Sederhanakan 2(3m + 5) − 3(m − 2).", "opts": ["3m + 4", "3m + 16", "9m + 4", "9m + 16"], "ans": [1], "exp": "6m+10−3m+6 = 3m+16.", "type": "single", "visual": null, "id": 28}, {"topic": "Perkalian Aljabar", "level": "Medium", "time": 18, "q": "Hasil dari x(x + 4) adalah ...", "opts": ["x² + 4x", "x² + 4", "2x + 4", "5x²"], "ans": [0], "exp": "x dikalikan ke kedua suku: x·x = x² dan x·4 = 4x.", "type": "single", "visual": null, "id": 29}, {"topic": "Perkalian Aljabar", "level": "Medium", "time": 20, "q": "Hasil dari 3a(2a − 5) adalah ...", "opts": ["6a² − 15a", "6a − 15", "5a² − 15a", "6a² − 5"], "ans": [0], "exp": "3a·2a = 6a² dan 3a·(−5)=−15a.", "type": "single", "visual": null, "id": 30}, {"topic": "Pembagian Aljabar", "level": "Medium", "time": 20, "q": "Sederhanakan (12x²y) ÷ (3xy), untuk x dan y tidak nol.", "opts": ["4x", "4xy", "4x²", "9x"], "ans": [0], "exp": "12÷3=4, x²÷x=x, dan y÷y=1. Hasilnya 4x.", "type": "single", "visual": null, "id": 31}, {"topic": "Pembagian Aljabar", "level": "Hard", "time": 25, "q": "Sederhanakan (18a³b²) ÷ (6ab), untuk a dan b tidak nol.", "opts": ["3a²b", "3a²b²", "12a²b", "3ab"], "ans": [0], "exp": "18÷6=3, a³÷a=a², dan b²÷b=b. Jadi 3a²b.", "type": "single", "visual": null, "id": 32}, {"topic": "Pembagian Aljabar", "level": "Hard", "time": 25, "q": "Sederhanakan (6x² + 9x) ÷ 3x, dengan x ≠ 0.", "opts": ["2x + 3", "2x² + 3", "5x", "2x + 9"], "ans": [0], "exp": "Faktorkan pembilang: 6x²+9x = 3x(2x+3). Setelah dibagi 3x, hasilnya 2x+3.", "type": "single", "visual": null, "id": 33}, {"topic": "Perkalian Aljabar", "level": "Easy", "time": 12, "q": "Hasil dari (2x)(3x) adalah ...", "opts": ["5x", "6x", "6x²", "5x²"], "ans": [2], "exp": "Koefisien dikalikan 2×3=6, dan x·x=x². Jadi 6x².", "type": "single", "visual": null, "id": 34}, {"topic": "Perkalian Aljabar", "level": "Easy", "time": 12, "q": "Hasil dari (−4a)(2b) adalah ...", "opts": ["−8ab", "8ab", "−6ab", "−8a"], "ans": [0], "exp": "−4×2=−8 dan a·b=ab, sehingga hasilnya −8ab.", "type": "single", "visual": null, "id": 35}, {"topic": "Substitusi", "level": "Easy", "time": 15, "q": "Jika x = 3 dan y = 2, nilai 5x + 4y adalah ...", "opts": ["19", "21", "23", "25"], "ans": [2], "exp": "5(3)+4(2)=15+8=23.", "type": "single", "visual": null, "id": 36}, {"topic": "Substitusi", "level": "Medium", "time": 18, "q": "Jika a = −2, nilai 3a² + 7 adalah ...", "opts": ["−5", "1", "19", "31"], "ans": [2], "exp": "Gunakan tanda kurung: a²=(−2)²=4. Maka 3(4)+7=19.", "type": "single", "visual": null, "id": 37}, {"topic": "Substitusi", "level": "Medium", "time": 18, "q": "Jika m = 4 dan n = −1, nilai 2m − 3n adalah ...", "opts": ["5", "8", "11", "13"], "ans": [2], "exp": "2(4)−3(−1)=8+3=11.", "type": "single", "visual": null, "id": 38}, {"topic": "Substitusi", "level": "Medium", "time": 20, "q": "Jika x = −3, nilai x² + 2x − 5 adalah ...", "opts": ["−20", "−8", "−2", "10"], "ans": [2], "exp": "(−3)² + 2(−3) − 5 = 9 − 6 − 5 = −2.", "type": "single", "visual": null, "id": 39}, {"topic": "Model Aljabar", "level": "Medium", "time": 22, "q": "Harga sword = x Robux dan shield = y Robux. Tim membeli 3 sword dan 2 shield lalu mendapat diskon 15 Robux. Jika x=80 dan y=45, total pembayaran adalah ...", "opts": ["300 Robux", "315 Robux", "330 Robux", "345 Robux"], "ans": [1], "exp": "Modelnya 3x+2y−15. Substitusi: 3(80)+2(45)−15 = 240+90−15 = 315.", "type": "single", "visual": null, "id": 40}, {"topic": "TKA Style", "level": "Hard", "time": 25, "type": "multi", "q": "Pilih SEMUA bentuk yang ekuivalen dengan 4(a + 3b) − 2(2a − b).", "opts": ["14b", "7b + 7b", "2(7b)", "4a + 14b"], "ans": [0, 1, 2], "exp": "Ekspresi asli menjadi 4a+12b−4a+2b=14b. Jadi 14b, 7b+7b, dan 2(7b) ekuivalen.", "visual": null, "id": 41}, {"topic": "TKA Style", "level": "Medium", "time": 20, "q": "Seorang siswa menulis 3(2x − 1) = 6x − 1. Perbaikan yang benar adalah ...", "opts": ["6x − 3", "6x + 3", "5x − 1", "6x − 2"], "ans": [0], "exp": "Angka 3 harus dikalikan ke kedua suku: 3·2x=6x dan 3·(−1)=−3.", "type": "single", "visual": null, "id": 42}, {"topic": "TKA Style", "level": "Hard", "time": 25, "type": "multi", "q": "Diberikan bentuk 5a + 2b − 3a + 4. Pilih SEMUA pernyataan yang benar.", "opts": ["Koefisien a setelah disederhanakan adalah 2", "Konstantanya adalah 4", "2b dapat digabung dengan 4", "Bentuk sederhananya 2a + 2b + 4"], "ans": [0, 1, 3], "exp": "5a−3a=2a, suku 2b tetap, dan konstanta 4 tetap. Jadi bentuk sederhana 2a+2b+4.", "visual": null, "id": 43}, {"topic": "TKA Style", "level": "Hard", "time": 25, "q": "Sebuah persegi panjang memiliki panjang (x + 3) cm dan lebar (x − 1) cm. Bentuk aljabar kelilingnya adalah ...", "opts": ["2x + 2", "4x + 4", "2x² + 4", "4x − 4"], "ans": [1], "exp": "Keliling = 2[(x+3)+(x−1)] = 2(2x+2) = 4x+4.", "visual": {"type": "rect", "top": "x + 3", "side": "x − 1"}, "type": "single", "id": 44}, {"topic": "TKA Style", "level": "Hard", "time": 30, "q": "Luas persegi panjang dengan sisi (x + 2) dan (x + 5) adalah ...", "opts": ["x² + 7x + 10", "x² + 10x + 7", "2x + 7", "x² + 3x + 10"], "ans": [0], "exp": "(x+2)(x+5)=x²+5x+2x+10=x²+7x+10.", "visual": {"type": "area", "a": "x + 2", "b": "x + 5"}, "type": "single", "id": 45}, {"topic": "OSN Style", "level": "Hard", "time": 28, "q": "Diketahui A = 3x + 5 dan B = x − 2. Bentuk sederhana dari 2A − 3B adalah ...", "opts": ["3x + 16", "3x + 4", "9x + 4", "9x + 16"], "ans": [0], "exp": "2A−3B = 2(3x+5)−3(x−2)=6x+10−3x+6=3x+16.", "type": "single", "visual": null, "id": 46}, {"topic": "OSN Style", "level": "Hard", "time": 28, "q": "Empat bilangan ganjil berurutan dimulai dari n, yaitu n, n+2, n+4, n+6. Jumlah keempatnya dalam bentuk paling sederhana adalah ...", "opts": ["4n + 6", "4n + 12", "n + 12", "4n + 24"], "ans": [1], "exp": "Jumlahkan: n+(n+2)+(n+4)+(n+6)=4n+12.", "type": "single", "visual": null, "id": 47}, {"topic": "OSN Style", "level": "Hard", "time": 30, "q": "Arena persegi berukuran n × n dikelilingi satu lapis ubin sehingga ukuran luarnya menjadi (n + 2) × (n + 2). Banyak ubin pada bingkai adalah ...", "opts": ["2n + 4", "4n + 4", "4n + 8", "n² + 4"], "ans": [1], "exp": "Bingkai = (n+2)²−n² = n²+4n+4−n² = 4n+4.", "visual": {"type": "frame", "inner": "n × n", "outer": "(n+2) × (n+2)"}, "type": "single", "id": 48}, {"topic": "OSN Style", "level": "Hard", "time": 30, "q": "Sederhanakan (x + 5)² − (x − 5)².", "opts": ["10x", "20x", "x² + 25", "20"], "ans": [1], "exp": "Ekspansi memberi (x²+10x+25)−(x²−10x+25)=20x. Suku x² dan 25 saling menghilangkan.", "type": "single", "visual": null, "id": 49}, {"topic": "OSN Style", "level": "Hard", "time": 30, "q": "Didefinisikan P = 2x + 3 dan Q = 5 − x. Nilai P + 2Q selalu sama dengan ...", "opts": ["x + 13", "2x + 13", "13", "10"], "ans": [2], "exp": "P+2Q=(2x+3)+2(5−x)=2x+3+10−2x=13. Variabel x saling menghilangkan.", "type": "single", "visual": null, "id": 50}];
+
+let idx=0, selected=[], state=[], timerId=null, remaining=0, startedAt=0, name='Siswa', locked=false, extraTime=0, currentLimit=0;
+const byId=id=>document.getElementById(id);
+
+function startQuiz(){
+  name = byId('studentName').value.trim() || 'Siswa';
+  extraTime = Number(byId('extraTime').value || 0);
+  byId('start').classList.add('hidden'); byId('quiz').classList.remove('hidden');
+  byId('studentLabel').textContent=name;
+  state=questions.map(()=>({status:'pending',time:0,selected:[],bonusUsed:false,bonus:0}));
+  renderMap(); renderQuestion();
+}
+function renderMap(){
+  const m=byId('qmap'); m.innerHTML='';
+  questions.forEach((_,i)=>{const d=document.createElement('button'); d.className='qdot'; d.textContent=i+1; if(i===idx)d.classList.add('current'); const s=state[i]?.status; if(s==='correct')d.classList.add('correct'); if(s==='wrong')d.classList.add('wrong'); if(s==='unanswered')d.classList.add('unanswered'); d.onclick=()=>{if(state[i].status!=='pending'||i===idx){idx=i;clearInterval(timerId);renderQuestion();}}; m.appendChild(d);});
+}
+function renderQuestion(){
+  locked=state[idx].status!=='pending'; selected=[...(state[idx].selected||[])];
+  const q=questions[idx];
+  byId('progressText').textContent=`Soal ${idx+1} / ${questions.length}`;
+  byId('progressBar').style.width=`${((idx+1)/questions.length)*100}%`;
+  byId('topic').textContent=q.topic; byId('qnum').textContent=`Soal ${String(idx+1).padStart(2,'0')}`;
+  const effectiveTime=q.time+extraTime+(state[idx].bonus||0);
+  byId('level').textContent=`${q.level} · ${effectiveTime} detik`; byId('qtext').textContent=q.q;
+  renderVisual(q.visual); renderOptions(q); renderMap();
+  byId('feedback').classList.add('hidden'); byId('feedback').innerHTML='';
+  byId('checkBtn').classList.toggle('hidden',locked); byId('nextBtn').classList.toggle('hidden',!locked); byId('addTimeBtn').classList.toggle('hidden',locked);
+  byId('addTimeBtn').disabled=!!state[idx].bonusUsed; byId('addTimeBtn').textContent=state[idx].bonusUsed?'✓ +10 detik dipakai':'⏱ +10 detik';
+  if(locked) showExistingFeedback();
+  clearInterval(timerId); currentLimit=effectiveTime; remaining=effectiveTime; startedAt=Date.now(); updateTimer();
+  if(!locked) timerId=setInterval(()=>{remaining--; updateTimer(); if(remaining<=0){clearInterval(timerId); timeoutQuestion();}},1000);
+}
+function renderVisual(v){
+  const el=byId('visual'); if(!v){el.classList.add('hidden');el.innerHTML='';return;}
+  el.classList.remove('hidden');
+  if(v.type==='chips'){el.innerHTML=`<div class="chips">${v.items.map(it=>`<div class="chip ${it[1]==='const'?'const':''}">${it[0]}</div>`).join('')}</div>`;}
+  else if(v.type==='arrows'){el.innerHTML=`<div class="v-arrow">${v.text}</div>`;}
+  else if(v.type==='rect'){el.innerHTML=`<div class="rectviz"><div class="top">${v.top}</div><div class="side">${v.side}</div></div>`;}
+  else if(v.type==='area'){el.innerHTML=`<div class="areagrid"><div>x²</div><div>5x</div><div>2x</div><div>10</div></div><div style="text-align:center;margin-top:10px;color:var(--muted)">Model luas: (${v.a})(${v.b})</div>`;}
+  else if(v.type==='frame'){el.innerHTML=`<div class="frameviz"><div class="inner">${v.inner}</div></div><div style="text-align:center;margin-top:10px;color:var(--muted)">Ukuran luar: ${v.outer}</div>`;}
+}
+function renderOptions(q){
+  const wrap=byId('options'); wrap.innerHTML='';
+  q.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='opt';b.innerHTML=`<span class="badge">${String.fromCharCode(65+i)}</span><span>${o}</span>`;if(selected.includes(i))b.classList.add('selected');b.onclick=()=>selectOption(i);wrap.appendChild(b);});
+  if(locked) colorOptions(q);
+}
+function selectOption(i){if(locked)return;const q=questions[idx];if(q.type==='multi'){selected.includes(i)?selected=selected.filter(x=>x!==i):selected.push(i);}else selected=[i];state[idx].selected=[...selected];renderOptions(q);}
+function eqSet(a,b){return a.length===b.length&&[...a].sort((x,y)=>x-y).every((v,i)=>v===[...b].sort((x,y)=>x-y)[i]);}
+function checkAnswer(auto=false){
+  if(locked)return; if(!auto&&selected.length===0){toast('Pilih jawaban terlebih dahulu.');return;}
+  clearInterval(timerId);const q=questions[idx];const elapsed=Math.min(currentLimit,Math.max(0,(Date.now()-startedAt)/1000));const correct=eqSet(selected,q.ans);
+  state[idx]={...state[idx],status:selected.length===0?'unanswered':(correct?'correct':'wrong'),time:elapsed,selected:[...selected]};
+  locked=true;colorOptions(q);showFeedback(q,correct,selected.length===0);byId('checkBtn').classList.add('hidden');byId('nextBtn').classList.remove('hidden');byId('addTimeBtn').classList.add('hidden');renderMap();
+}
+function timeoutQuestion(){selected=[];checkAnswer(true);}
+function colorOptions(q){[...byId('options').children].forEach((el,i)=>{el.classList.remove('selected');if(q.ans.includes(i))el.classList.add('correct');else if((state[idx].selected||[]).includes(i))el.classList.add('wrong');});}
+function showFeedback(q,correct,unanswered=false){
+  const f=byId('feedback');f.className='feedback '+(correct?'good':'bad');f.classList.remove('hidden');
+  const head=unanswered?'⏱ Waktu habis':(correct?'✅ Benar!':'❌ Belum tepat');
+  const ansText=q.ans.map(i=>String.fromCharCode(65+i)+'. '+q.opts[i]).join(' • ');
+  f.innerHTML=`<h4>${head}</h4><p>Jawaban benar: <b>${ansText}</b></p><div class="explain"><b>Pembahasan:</b><br>${q.exp}</div>`;
+}
+function showExistingFeedback(){const q=questions[idx],s=state[idx];colorOptions(q);showFeedback(q,s.status==='correct',s.status==='unanswered');}
+function nextQuestion(){clearInterval(timerId);if(idx<questions.length-1){idx++;renderQuestion();}else finishQuiz();}
+function updateTimer(){byId('timerText').textContent=remaining;const p=Math.max(0,remaining/currentLimit*100);const color=p>50?'var(--green)':p>25?'var(--yellow)':'var(--red)';byId('timer').style.background=`conic-gradient(${color} ${p}%, #223149 0)`;}
+function addTime(){
+  if(locked)return;if(state[idx].bonusUsed){toast('Tambahan waktu untuk soal ini sudah dipakai.');return;}
+  state[idx].bonusUsed=true;state[idx].bonus=10;remaining+=10;currentLimit+=10;byId('level').textContent=`${questions[idx].level} · ${currentLimit} detik`;byId('addTimeBtn').disabled=true;byId('addTimeBtn').textContent='✓ +10 detik dipakai';updateTimer();toast('Tambahan 10 detik aktif!');
+}
+function finishQuiz(){
+  byId('quiz').classList.add('hidden');const res=byId('result');res.classList.remove('hidden');
+  const correct=state.filter(s=>s.status==='correct').length,wrong=state.filter(s=>s.status==='wrong').length,blank=state.filter(s=>s.status==='unanswered').length;
+  const score=Math.round(correct/questions.length*100);const times=state.filter(s=>s.status!=='pending').map(s=>s.time);const avg=times.length?times.reduce((a,b)=>a+b,0)/times.length:0;
+  const bestKey='algebraArenaBest';const best=Math.max(Number(localStorage.getItem(bestKey)||0),score);localStorage.setItem(bestKey,best);
+  const topics={};questions.forEach((q,i)=>{topics[q.topic]??={ok:0,total:0};topics[q.topic].total++;if(state[i].status==='correct')topics[q.topic].ok++;});
+  const rows=Object.entries(topics).map(([t,v])=>{const p=Math.round(v.ok/v.total*100);return `<div class="topicRow"><span>${t}</span><div class="miniBar"><i style="width:${p}%"></i></div><b>${p}%</b></div>`}).join('');
+  const review=questions.map((q,i)=>`<div class="reviewItem"><b>${i+1}. ${q.q}</b><small>Status: ${state[i].status==='correct'?'Benar':state[i].status==='wrong'?'Salah':'Tidak dijawab'} · Jawaban benar: ${q.ans.map(a=>q.opts[a]).join(', ')}<br>${q.exp}</small></div>`).join('');
+  res.innerHTML=`<div style="display:grid;grid-template-columns:1fr 200px;gap:24px;align-items:center"><div><span class="pill">🏁 Arena selesai</span><h2>Kerja bagus, ${name}!</h2><p style="color:var(--muted)">Berikut ringkasan performa kuis aljabar.</p></div><div class="scoreRing" style="background:conic-gradient(var(--green) ${score}%,#1c2c43 0)"><div><b>${score}</b><small>/100</small></div></div></div>
+  <div class="scoreGrid"><div class="scoreCard"><b>${correct}</b><span>Benar</span></div><div class="scoreCard"><b>${wrong}</b><span>Salah</span></div><div class="scoreCard"><b>${blank}</b><span>Tidak dijawab</span></div><div class="scoreCard"><b>${avg.toFixed(1)} dtk</b><span>Rata-rata waktu</span></div></div>
+  <div class="card" style="padding:20px"><h3>Analisis per Topik</h3><div class="topicRows">${rows}</div></div>
+  <p style="color:var(--muted);margin-top:18px">Skor terbaik di browser ini: <b style="color:#fff">${best}</b>. Target penguasaan disarankan ≥ 80%.</p>
+  <div class="actions"><button class="btn primary" onclick="location.reload()">Kerjakan Ulang</button><button class="btn secondary" onclick="toggleReview()">Lihat Semua Pembahasan</button></div>
+  <div id="fullReview" class="review hidden"><h3>Review & Pembahasan Lengkap</h3>${review}</div>`;
+}
+function toggleReview(){byId('fullReview').classList.toggle('hidden');}
+function toast(msg){const t=byId('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600);}
+</script>
+</body>
+</html>
